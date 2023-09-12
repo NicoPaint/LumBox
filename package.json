@@ -1,0 +1,25 @@
+{
+  "name": "lumbox",
+  "version": "1.0.0",
+  "description": "LumBox is the best way to be updated with the most recent movies, TV shows and more. This is a project that uses The Movie Data Base API (TMDB).",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicoPaint/LumBox.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "API",
+    "REST",
+    "AXIOS"
+  ],
+  "author": "@NicolasFPinto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NicoPaint/LumBox/issues"
+  },
+  "homepage": "https://github.com/NicoPaint/LumBox#readme"
+}
