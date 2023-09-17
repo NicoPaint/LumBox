@@ -1,3 +1,47 @@
+/* 
+Conveccion de buenas practicas para crear los estilos
+1. Posicionamiento.
+2. Modelo de caja (Box Model)
+3. Tipografia.
+4. Visual.
+5. Otros.
+*/
+
+/* AcÃ¡ se van a guardar las variables a usar en los estilos */
+:root{
+    /* colores */
+    --white-ice: #F1F6F9;
+    --polar-ocean: #394867;
+    --dark-blue: #212A3E;
+    --seal-grey: #9BA4B5;
+}
+
+/* Se agregan los estilos generales al proyecto */
+
+/* Con este bloque se reinician los estilos de los navegadores */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    font-size: 62.5%;
+    font-family: 'DM Sans', sans-serif;
+    scroll-behavior: smooth;  /* hace que el scroll de la pagina ocasionado por alguna accion (Ej. boton) se suave y evita los saltos abruptos */
+    background-color: var(--dark-blue);
+}
+
 body{
-    background-color: red;
+    background-color: var(--white-ice);
+    height: 100vh;
+}
+
+.inactive{
+    display: none;  
+}
+
+body{
+    display: grid;
+    grid-template-rows: 10% 85% 5%;
 }
