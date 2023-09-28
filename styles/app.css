@@ -63,8 +63,8 @@ header{
 
 .header-arrow{
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     background-image: url("https://cdn-icons-png.flaticon.com/512/54/54782.png");
     background-position: center;
     background-repeat: no-repeat;
@@ -214,6 +214,26 @@ header{
 
 .category-title{
     color: var(--seal-grey);
+}
+
+/* Sección de generict list */
+.genericList-container{
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+
+.genericList-container article{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 2rem;
+    margin: 0 1rem;
+}
+
+.movie-container--small{
+    width: 14rem;
+    height: 21rem;
 }
 
 /* navegación */
