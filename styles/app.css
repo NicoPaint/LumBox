@@ -236,6 +236,25 @@ header{
     height: 21rem;
 }
 
+/* Sección del footer */
+
+footer{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+    background-color: var(--dark-blue);
+}
+
+footer a{
+    width: 3rem;
+    height: 3rem;
+    overflow: hidden;
+}
+
+footer a img{
+    width: 100%;
+}
+
 /* navegación */
 .inactive{
     display: none;  
