@@ -27,7 +27,7 @@ Conveccion de buenas practicas para crear los estilos
 
 html{
     font-size: 62.5%;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     scroll-behavior: smooth;  /* hace que el scroll de la pagina ocasionado por alguna accion (Ej. boton) se suave y evita los saltos abruptos */
     background-color: var(--dark-blue);
 }
@@ -50,6 +50,10 @@ h2{
 
 h3{
     font-size: 1.5rem;
+}
+
+h1, h2, h3{
+    font-family: 'Roboto', sans-serif;
 }
 
 /* estilos del header */
@@ -253,6 +257,75 @@ footer a{
 
 footer a img{
     width: 100%;
+}
+
+/* Sección de Movie Detail */
+
+.body--movie-detail{  /* Esta clase se le aplica al body cuando se abre la vista en detalle de una pelicula */
+    display: block;
+}
+
+.header--movie-detail{  /* Esta clase se le aplica al Header cuandp se abre la vista en detalle de una peliculaq */
+    width: 100vw;
+    height: 48rem;
+    position: fixed;
+    background-image: url("https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Af4bXE63pVsb2FtbW8uYIyPBadD.jpg");
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.movieDetail-container{
+    display: grid;
+    grid-template-rows: auto auto;
+    place-items: center;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    margin-top: 40rem;
+    padding: 2.4rem 1.8rem;
+    gap: 3rem;
+    background-color: var(--dark-blue);
+    border-top-left-radius: 1.6rem;
+    border-top-right-radius: 1.6rem;
+}
+
+.movieDetail-info{
+    display: grid;
+    gap: 1rem;
+}
+
+.movieDetail-title,
+.movieDetail-score{
+    font-size: 2.4rem;
+    color: var(--white-ice);
+}
+
+.movieDetail-title + div{  /* selecciona el div que sea el siguiente hermano a .movieDetail-title */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.movieDetail-categories{
+    font-size: 1.4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--white-ice);
+}
+
+.movieDetail-overview{
+    font-size: 1.2qrem;
+    text-align: justify;
+    color: var(--seal-grey);
+}
+
+.movieDetail-related{
+    display: flex;
+    flex-direction: column;
+    width: 90vw;  /* Revisar despues porque se rompe este div */
+    gap: 1.5rem;
+    color: var(--white-ice);
 }
 
 /* navegación */
