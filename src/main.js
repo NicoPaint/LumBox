@@ -1,11 +1,20 @@
+//se hizo la migración a AXIOS por lo que se crea un instancia de el para configurar los datos comunes y asi usarlos por todo el programa.
+const api = axios.create({
+    baseURL: 'https://api.themoviedb.org/3/',
+    Headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+    },
+    params: {
+        'api_key': API_KEY,  //API_KEY esta oculta en otro archivo, usa tu propia API_KEY.
+    }
+}); 
+
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
 
 //esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
 async function getTrendingMovies(){
-    //se hace la solicitud GET con fetch para traer el objeto de peliculas en tendencia.
-    const res = await fetch(`https://api.themoviedb.org/3/trending/movie/day?language=en-US&api_key=${API_KEY}`);  //API_KEY esta oculta en otro archivo, usa tu propia API_KEY.
-    const data = await res.json();
-
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
+    const { data } = await api(`trending/movie/day?language=en-US`);  //se desestructura la respuesta de api para obtener los datos de una vez
     const movies = data.results; //movies es el objeto de peliculas en tendencia. tiene una total de 20 elementos.
     
     //se itera por cada elemento en movies para sacar la informacion de cada una de las peliculas en tendencia
@@ -34,10 +43,8 @@ async function getTrendingMovies(){
 
 //esta funcion se usa para traer las categorias (generos) de las peliculas y mostrarlas en la sección de categories, es asincrona porque se va a consumir una API.
 async function getCategoriesMovies(){
-    //se hace la solicitud GET con fetch para traer el objeto de generos de peliculas.
-    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=${API_KEY}`);  //API_KEY esta oculta en otro archivo, usa tu propia API_KEY.
-    const data = await res.json();
-
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de generos de peliculas.
+    const { data } = await api(`genre/movie/list?language=en-US`);  //se desestructura la respuesta de api para obtener los datos de una vez
     const categories = data.genres; //categories es el objeto de generos. tiene una total de 19 elementos.
     
     //se itera por cada elemento en categories para sacar la informacion de cada una de los generos (id y nombre)
