@@ -68,6 +68,3 @@ async function getCategoriesMovies(){
         categoriesMoviesContainer.appendChild(categoryContainer);
     });
 }
-
-getTrendingMovies(); //se llama esta función para mostrar las peliculas en tendencia.
-getCategoriesMovies();  //se llama esta función para mostrar las categorias de peliculas.
