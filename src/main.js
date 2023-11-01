@@ -19,9 +19,7 @@ async function getTrendingMovies(){
     
     //se itera por cada elemento en movies para sacar la informacion de cada una de las peliculas en tendencia
     movies.forEach(movie => {
-        //se selecciona el contenedor de toda la lista de peliculas del HTML por su clase 
-        const trendingPreviewMoviesContainer = document.querySelector('.trendingPreview-container .trendingPreview-movieList');
-
+    
         //Se crean los componentes que forman parte de cada uno de los elementos de la lista y se le agregan los atributos que requieren, revisar index.html
         const movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container');
@@ -37,7 +35,7 @@ async function getTrendingMovies(){
 
         //se agregan cada un de los componentes como hijos según la herarquia para se mostrados en la pagina web. 
         movieContainer.appendChild(movieImg);
-        trendingPreviewMoviesContainer.appendChild(movieContainer);
+        trendingPreviewMovieList.appendChild(movieContainer);  //trendingPreviewMovieList se trajo de node.js
     });
 }
 
@@ -49,8 +47,6 @@ async function getCategoriesMovies(){
     
     //se itera por cada elemento en categories para sacar la informacion de cada una de los generos (id y nombre)
     categories.forEach(category => {
-        //se selecciona el contenedor de toda la lista de categorias del HTML por su clase 
-        const categoriesMoviesContainer = document.querySelector('.categoriesPreview-container .categoriesPreview-list');
 
         //Se crean los componentes que forman parte de cada uno de los elementos de la lista y se le agregan los atributos que requieren, revisar index.html
         const categoryContainer = document.createElement('div');
@@ -65,6 +61,6 @@ async function getCategoriesMovies(){
         //se agregan cada un de los componentes como hijos según la herarquia para se mostrados en la pagina web.
         categoryTitle.appendChild(categoryTitleText); 
         categoryContainer.appendChild(categoryTitle);
-        categoriesMoviesContainer.appendChild(categoryContainer);
+        categoriesPreviewList.appendChild(categoryContainer); //categoriesPreviewList se trajo de node.js
     });
 }
