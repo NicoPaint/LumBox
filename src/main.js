@@ -16,6 +16,8 @@ async function getTrendingMovies(){
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
     const { data } = await api(`trending/movie/day?language=en-US`);  //se desestructura la respuesta de api para obtener los datos de una vez
     const movies = data.results; //movies es el objeto de peliculas en tendencia. tiene una total de 20 elementos.
+
+    trendingPreviewMovieList.innerHTML = "";  //con esta linea se limpia el elemento cada vez que se llama la funcion para evitar cargas duplicadas
     
     //se itera por cada elemento en movies para sacar la informacion de cada una de las peliculas en tendencia
     movies.forEach(movie => {
@@ -44,6 +46,8 @@ async function getCategoriesMovies(){
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de generos de peliculas.
     const { data } = await api(`genre/movie/list?language=en-US`);  //se desestructura la respuesta de api para obtener los datos de una vez
     const categories = data.genres; //categories es el objeto de generos. tiene una total de 19 elementos.
+
+    categoriesPreviewList.innerHTML = '';  //con esta linea se limpia el elemento cada vez que se llama la funcion para evitar cargas duplicadas
     
     //se itera por cada elemento en categories para sacar la informacion de cada una de los generos (id y nombre)
     categories.forEach(category => {
