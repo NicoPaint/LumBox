@@ -6,7 +6,7 @@ headerArrow.addEventListener('click', () => location.hash = '');
 window.addEventListener('DOMContentLoaded', navigator, false);  //se agrega un event listener para cuando se carga el DOM y aplique la funcion navigator
 window.addEventListener('hashchange', navigator, false);  //se agrega un event listener para cada vez que se cambie el hash se aplique la funcion navigator.
 
-//esta funcion va a determinar que vista mostrar segun el hash.
+//esta funcion va a determinar que vista mostrar segun el hash. Según como empiece el hash (string) se va hacer la validación.
 function navigator(){
     console.log({ location });
 
@@ -25,6 +25,11 @@ function navigator(){
     else {
         homePage();
     }
+
+
+    //con esta linea se consigue que el scroll de estas secciones simepre empiece en la parte mas alta.
+    categoriesPreviewList.scrollTop = 0;
+    genericListSection.scrollTop = 0;
 }
 
 // estas son las funciones segun la pagina. Estas van a determinar que mostrar y ejecutar en cada una de ellas.
@@ -115,6 +120,15 @@ function categoriesPage(){
     movieDetailSection.classList.add('inactive');
 
     footer.classList.remove('inactive');
+
+    //se saca la informacion del id y el nombre de la categoria del hash para poder hacer el llamado a la API
+    const [ _ , categoryInfo] = location.hash.split('=');
+    const [ categoryId , urlName] = categoryInfo.split('-');
+    const categoryName = decodeURI(urlName);  //con esta funcion se evita usar string codificados y se usa el string original. Cuando se usan caracteres raros para las URLs, como los espacios en blanco "", estos son codificados. Por lo que titulos con 2 palabras separados por un espacio en blanco seran codificados.
+
+    headerTitleCategoryView.textContent = categoryName;  //se cambia el titulo de cada sección según la categoría.
+
+    getMovieByCategory(categoryId);
 }
 
 function homePage(){
