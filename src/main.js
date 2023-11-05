@@ -113,3 +113,22 @@ async function getMovieByCategory(id){
         movieModificator: "--small",
     })
 }
+
+//esta funcion se usa para traer las peliculas según la búsqueda del usuario y mostrarlas en la sección de búsqueda, es asincrona porque se va a consumir una API.
+async function getMovieBySearch(query){
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
+    const { data } = await api(`search/movie`,{
+        params:{
+            'language': 'en-US',
+            query,
+        }
+    });  //se desestructura la respuesta de api para obtener los datos de una vez
+    const movies = data.results; //movies es el objeto de peliculas según la categoria. tiene una total de 20 elementos.
+    
+    //se llama a la funcion createMovies para visualizar las peliculas segun la búsqueda del usuario.
+    createMovies({
+        movies,
+        container: genericMovieList,
+        movieModificator: "--small",
+    })
+}

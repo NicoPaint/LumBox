@@ -1,5 +1,5 @@
 //se agregan los event listener a los siguientes elementos para cambiar la navegacion de la pagina a traves de clicks.
-searchButton.addEventListener('click', () => location.hash = '#search=');
+searchButton.addEventListener('click', () => location.hash = `#search=${searchInput.value}`);  //Aca se agraga el query del usuario al hash
 trendingPreviewButton.addEventListener('click', () => location.hash = '#trends');
 headerArrow.addEventListener('click', () => location.hash = '');
 
@@ -66,7 +66,7 @@ function searchPage(){
     headerArrow.classList.remove('inactive');
     headerArrow.classList.remove('header-arrow--white');
     headerTitle.classList.add('inactive');
-    headerTitleCategoryView.classList.remove('inactive');
+    headerTitleCategoryView.classList.add('inactive');
     searchForm.classList.remove('inactive');
 
     main.classList.remove('main--movie-detail');
@@ -76,6 +76,11 @@ function searchPage(){
     movieDetailSection.classList.add('inactive');
 
     footer.classList.remove('inactive');
+
+    //se saca la informacion del query del hash para poder hacer el llamado a la API
+    const [ _ , query] = location.hash.split('=');
+
+    getMovieBySearch(query);  //se ejecuta esta función pasandole el query del usuario.
 }
 
 function movieDetailsPage(){
@@ -128,7 +133,7 @@ function categoriesPage(){
 
     headerTitleCategoryView.textContent = categoryName;  //se cambia el titulo de cada sección según la categoría.
 
-    getMovieByCategory(categoryId);
+    getMovieByCategory(categoryId); //se ejecuta esta funcion pasandole el id de la categoría.
 }
 
 function homePage(){
