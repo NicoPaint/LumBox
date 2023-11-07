@@ -45,7 +45,7 @@ function createMovies({
 //Llamados a la API
 
 //esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
-async function getTrendingMovies(){
+async function getTrendingMoviesPreview(){
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
     const { data } = await api(`trending/movie/day`, {
         params:{
@@ -130,5 +130,23 @@ async function getMovieBySearch(query){
         movies,
         container: genericMovieList,
         movieModificator: "--small",
+    })
+}
+
+//esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
+async function getTrendingMovies(){
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
+    const { data } = await api(`trending/movie/day`, {
+        params:{
+            'language': 'en-US',
+        }
+    });  //se desestructura la respuesta de api para obtener los datos de una vez
+    const movies = data.results; //movies es el objeto de peliculas en tendencia. tiene una total de 20 elementos.
+
+    //se llama a la funcion createMovies para visualizar las peliculas en tendencia
+    createMovies({
+        movies,
+        container: genericMovieList,
+        movieModificator: '--small',
     })
 }

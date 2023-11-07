@@ -1,7 +1,7 @@
 //se agregan los event listener a los siguientes elementos para cambiar la navegacion de la pagina a traves de clicks.
 searchButton.addEventListener('click', () => location.hash = `#search=${searchInput.value}`);  //Aca se agraga el query del usuario al hash
 trendingPreviewButton.addEventListener('click', () => location.hash = '#trends');
-headerArrow.addEventListener('click', () => location.hash = '');
+headerArrow.addEventListener('click', () => history.back()); //location.hash = ''  revisar despues
 
 window.addEventListener('DOMContentLoaded', navigator, false);  //se agrega un event listener para cuando se carga el DOM y aplique la funcion navigator
 window.addEventListener('hashchange', navigator, false);  //se agrega un event listener para cada vez que se cambie el hash se aplique la funcion navigator.
@@ -54,6 +54,10 @@ function trendsPage(){
     movieDetailSection.classList.add('inactive');
 
     footer.classList.remove('inactive');
+
+    headerTitleCategoryView.textContent = 'Trendings';  //se cambia el titulo a trendings.
+
+    getTrendingMovies();
 }
 
 function searchPage(){
@@ -157,6 +161,6 @@ function homePage(){
 
     footer.classList.remove('inactive');
 
-    getTrendingMovies(); //se llama esta función para mostrar las peliculas en tendencia. El archivo esta en main.js
+    getTrendingMoviesPreview(); //se llama esta función para mostrar las peliculas en tendencia. El archivo esta en main.js
     getCategoriesMovies();  //se llama esta función para mostrar las categorias de peliculas. El archivo esta en main.js
 }
