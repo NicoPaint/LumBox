@@ -278,16 +278,17 @@ footer a img{
 
 .body--movie-detail{  /* Esta clase se le aplica al body cuando se abre la vista en detalle de una pelicula */
     display: block;
+    background-color: var(--dark-blue);
 }
 
 .header--movie-detail{  /* Esta clase se le aplica al Header cuandp se abre la vista en detalle de una peliculaq */
     width: 100vw;
     height: 48rem;
     position: fixed;
-    background-image: url("https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Af4bXE63pVsb2FtbW8uYIyPBadD.jpg");
+    /* background-image: url("https://www.themoviedb.org/t/p/w600_and_h900_bestv2/Af4bXE63pVsb2FtbW8uYIyPBadD.jpg");
     background-position: top;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
 .main--movie-detail{  /* Esta clase se le aplica al main cuandp se abre la vista en detalle de una peliculaq */
@@ -327,6 +328,8 @@ footer a img{
 }
 
 .movieDetail-categories{
+    max-width: 200px;
+    text-align: end;
     font-size: 1.4rem;
     font-weight: 300;
     font-style: italic;

@@ -1,7 +1,10 @@
 //se agregan los event listener a los siguientes elementos para cambiar la navegacion de la pagina a traves de clicks.
 searchButton.addEventListener('click', () => location.hash = `#search=${searchInput.value}`);  //Aca se agraga el query del usuario al hash
 trendingPreviewButton.addEventListener('click', () => location.hash = '#trends');
-headerArrow.addEventListener('click', () => history.back()); //location.hash = ''  revisar despues
+headerArrow.addEventListener('click', () => {
+    header.style.background = '';
+    history.back()
+}); //location.hash = ''  revisar despues
 
 window.addEventListener('DOMContentLoaded', navigator, false);  //se agrega un event listener para cuando se carga el DOM y aplique la funcion navigator
 window.addEventListener('hashchange', navigator, false);  //se agrega un event listener para cada vez que se cambie el hash se aplique la funcion navigator.
@@ -107,6 +110,11 @@ function movieDetailsPage(){
     movieDetailSection.classList.remove('inactive');
 
     footer.classList.add('inactive');
+
+    //se saca la informacion del id de la pelucula del hash para poder hacer el llamado a la API
+    const [ _ , movieId] = location.hash.split('=');
+
+    getMovieById(movieId);  //se ejecuta esta función pasandole el id de la pelicula.
 }
 
 function categoriesPage(){

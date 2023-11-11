@@ -26,9 +26,10 @@ function createMovies({
         //Se crean los componentes que forman parte de cada uno de los elementos de la lista y se le agregan los atributos que requieren, revisar index.html
         const movieContainer = document.createElement('div');
         movieContainer.classList.add(`movie-container${movieModificator}`);
+        movieContainer.addEventListener('click', () => location.hash = `#movie=${movie.id}`);
         
         const movieImg = document.createElement('img');
-        const movieImgSize = '/w342'  //esto se sacó segun la documentacion de TMDB API.
+        const movieImgSize = '/w342'  //esto se sacó segun la documentacion de TMDB API. https://developer.themoviedb.org/reference/configuration-details
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(
@@ -149,4 +150,67 @@ async function getTrendingMovies(){
         container: genericMovieList,
         movieModificator: '--small',
     })
+}
+
+async function getMovieById(id){
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
+    const { data: movie } = await api(`movie/${id}`,{
+        params:{
+            'language': 'en-US',
+        }
+    });  //se desestructura la respuesta de api para obtener los datos de una vez
+
+    movieDetailTitle.textContent = movie.title;
+    movieDetailScore.textContent = movie.vote_average.toFixed(1);
+    movieDetailOverview.textContent = movie.overview;
+
+    const movieImgSize = '/w500'  //esto se sacó segun la documentacion de TMDB API. https://developer.themoviedb.org/reference/configuration-details
+    header.style.background = `
+        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%),
+        top/cover no-repeat url(${imagesBaseURL}${movieImgSize}${movie.poster_path})
+    `;
+    
+    const movieCategories = movie.genres.map(genre => genre.name);
+    movieDetailCategories.textContent = movieCategories.join(', ')
+
+    getRelatedMoviesById(id);
+}
+
+async function getRelatedMoviesById(id){
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
+    const { data } = await api(`movie/${id}/recommendations`,{
+        params:{
+            'language': 'en-US',
+        }
+    });  //se desestructura la respuesta de api para obtener los datos de una vez
+
+    const relatedMovies = data.results;
+    console.log(relatedMovies);
+
+    createMovies({
+        movies: relatedMovies,
+        container: movieDetailMovieList,
+        movieModificator: '',
+    })
+
+    //
+    if(relatedMovies.length == 0){
+        //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
+        const { data } = await api(`movie/popular`, {
+            params:{
+                'language': 'en-US',
+            }
+        });  //se desestructura la respuesta de api para obtener los datos de una vez
+        const movies = data.results; //movies es el objeto de peliculas en tendencia. tiene una total de 20 elementos.
+
+        //se llama a la funcion createMovies para visualizar las peliculas en tendencia
+        createMovies({
+            movies,
+            container: movieDetailMovieList,
+            movieModificator: '',
+        })
+    }
+
+    html.scrollTop = 0;
+    movieDetailMovieList.scrollLeft = 0;
 }

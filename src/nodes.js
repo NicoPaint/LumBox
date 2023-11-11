@@ -1,5 +1,6 @@
 
 /* partes principales */
+const html = document.querySelector('html');
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 const main = document.querySelector('main');
@@ -26,3 +27,7 @@ const headerTitleCategoryView = document.querySelector('.header-title--categoryV
 const searchButton = document.querySelector('.search-btn');
 const searchInput = document.querySelector('.search-input');
 const trendingPreviewButton = document.querySelector('.trendingPreview-btn');
+const movieDetailTitle = document.querySelector('.movieDetail-title');
+const movieDetailScore = document.querySelector('.movieDetail-score');
+const movieDetailCategories = document.querySelector('.movieDetail-categories');
+const movieDetailOverview = document.querySelector('.movieDetail-overview');
