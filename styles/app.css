@@ -14,6 +14,7 @@ Conveccion de buenas practicas para crear los estilos
     --polar-ocean: #394867;
     --dark-blue: #212A3E;
     --seal-grey: #9BA4B5;
+    --loading-grey: #d6d6d6;
 }
 
 /* Se agregan los estilos generales al proyecto */
@@ -183,7 +184,28 @@ main{
 .movie-container{
     width: 20rem;
     height: 30rem;
+    cursor: pointer;
 }
+
+.movie-container--loading{
+    min-width: 20rem;  /* hace que el skeleton se expanda mas alla del contenedor */
+    background-color: var(--loading-grey);
+    border-radius: 1rem;
+    animation: loading-skeleton infinite 1.5s;
+}
+
+.movie-container--loading:nth-child(2){
+    animation-delay: .2s;
+}
+
+.movie-container--loading:nth-child(3){
+    animation-delay: .4s;
+}
+
+.movie-container--loading:nth-child(4){
+    animation-delay: .6s;
+}
+
 
 .movie-img{
     height: 100%;
@@ -194,8 +216,8 @@ main{
 
 .categoriesPreview-container{
     display: grid;
-    grid-template-rows: 1fr 3fr;
-    height: 23rem;
+    grid-template-rows: 1fr 4fr;
+    height: calc(100% - 35rem);
 }
 
 .categoriesPreview-title{
@@ -223,6 +245,12 @@ main{
     background-color: var(--polar-ocean);
     border-radius: 1rem;
     cursor: pointer;
+}
+
+.category-container--loading{
+    background-color: var(--loading-grey);
+    border-radius: 1rem;
+    animation: loading-skeleton infinite 1.5s;
 }
 
 .category-container:hover{
@@ -253,6 +281,14 @@ main{
 .movie-container--small{
     width: 14rem;
     height: 21rem;
+    cursor: pointer;
+}
+
+.movie-container--small-loading{
+    min-width: 14rem;  /* hace que el skeleton se expanda mas alla del contenedor */
+    background-color: var(--loading-grey);
+    border-radius: 1rem;
+    animation: loading-skeleton infinite 1.5s;
 }
 
 /* Sección del footer */
@@ -313,12 +349,47 @@ footer a img{
 .movieDetail-info{
     display: grid;
     gap: 1rem;
+    width: 100%;
 }
 
 .movieDetail-title,
 .movieDetail-score{
     font-size: 2.4rem;
     color: var(--white-ice);
+}
+
+.movieDetail-title--loading{
+    height: 2.85rem;
+    width: 100%;
+    min-height: 2.85rem;
+    min-width: 100%;
+}
+
+.movieDetail-score--loading{
+    width: 3.4rem;
+    height: 3.25rem;
+    min-width: 3.4rem;
+    min-height: 3.25rem;
+}
+
+.movieDetail-categories--loading{
+    width: 70%;
+    height: 2rem;
+    min-width: 70%;
+    min-height: 2rem;
+}
+
+.movieDetail-overview--loading{
+    width: 100%;
+    height: 10rem;
+    min-width: 100%;
+    min-height: 10rem;
+}
+
+.animation{
+    background-color: var(--loading-grey);
+    border-radius: 1rem;
+    animation: loading-skeleton infinite 1.5s;
 }
 
 .movieDetail-title + div{  /* selecciona el div que sea el siguiente hermano a .movieDetail-title */
@@ -353,4 +424,14 @@ footer a img{
 /* navegación */
 .inactive{
     display: none;  
+}
+
+/* Animations */
+@keyframes loading-skeleton {
+    0%, 100%{
+        opacity: 100%;
+    }
+    50%{
+        opacity: 0%;
+    }
 }

@@ -11,7 +11,7 @@ window.addEventListener('hashchange', navigator, false);  //se agrega un event l
 
 //esta funcion va a determinar que vista mostrar segun el hash. Según como empiece el hash (string) se va hacer la validación.
 function navigator(){
-    console.log({ location });
+    /* console.log({ location }); */
 
     if(location.hash.startsWith('#trends')){
         trendsPage();

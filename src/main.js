@@ -152,32 +152,46 @@ async function getTrendingMovies(){
     })
 }
 
+//Esta funcion se usa para traer la información de un película en especifico utilizando su ID. Esta se va usar para llenar la sección de detalle de una película.
 async function getMovieById(id){
-    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
-    const { data: movie } = await api(`movie/${id}`,{
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de pelicula según el Id.
+    const { data: movie, status } = await api(`movie/${id}`,{
         params:{
             'language': 'en-US',
         }
     });  //se desestructura la respuesta de api para obtener los datos de una vez
 
+    //Si la solicitud es exitosa, entonces se van a remover los loading skeletons de los textos en la sección de detalle.
+    if(status == 200){
+        movieDetailTitle.classList.remove('movieDetail-title--loading', 'animation');
+        movieDetailScore.classList.remove('movieDetail-score--loading', 'animation');
+        movieDetailCategories.classList.remove('movieDetail-categories--loading', 'animation');
+        movieDetailOverview.classList.remove('movieDetail-overview--loading', 'animation');
+    }
+
+    //se llenan los elementos con la información que se trajo de la API. 
     movieDetailTitle.textContent = movie.title;
     movieDetailScore.textContent = movie.vote_average.toFixed(1);
     movieDetailOverview.textContent = movie.overview;
 
     const movieImgSize = '/w500'  //esto se sacó segun la documentacion de TMDB API. https://developer.themoviedb.org/reference/configuration-details
+    
+    //Se agrega la imagen de la película como fondo del header para dar el efecto deseado.
     header.style.background = `
         linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%),
         top/cover no-repeat url(${imagesBaseURL}${movieImgSize}${movie.poster_path})
     `;
     
+    //Se extrae la info de los géneros para mostrarlo en una sola línea.
     const movieCategories = movie.genres.map(genre => genre.name);
     movieDetailCategories.textContent = movieCategories.join(', ')
 
-    getRelatedMoviesById(id);
+    getRelatedMoviesById(id); //se invoca esta función para mostar las películas relacionadas a la película mostrada en detalle.
 }
 
+//Esta función se usa para mostrar las películas relacionadas en la sección de detalle de una película.
 async function getRelatedMoviesById(id){
-    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
+    //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la recomendación de la película en detalle.
     const { data } = await api(`movie/${id}/recommendations`,{
         params:{
             'language': 'en-US',
@@ -187,23 +201,24 @@ async function getRelatedMoviesById(id){
     const relatedMovies = data.results;
     console.log(relatedMovies);
 
+    //se llama a la funcion createMovies para visualizar las peliculas relacionadas
     createMovies({
         movies: relatedMovies,
         container: movieDetailMovieList,
         movieModificator: '',
     })
 
-    //
+    //Esta sección se ejecuta si por alguna razón no hay ninguna recomendación de películas al ID que se pasó inicialmente. Trae las películas mas populares en la API.
     if(relatedMovies.length == 0){
-        //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
+        //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas populares.
         const { data } = await api(`movie/popular`, {
             params:{
                 'language': 'en-US',
             }
         });  //se desestructura la respuesta de api para obtener los datos de una vez
-        const movies = data.results; //movies es el objeto de peliculas en tendencia. tiene una total de 20 elementos.
+        const movies = data.results; //movies es el objeto de peliculas populares. tiene una total de 20 elementos.
 
-        //se llama a la funcion createMovies para visualizar las peliculas en tendencia
+        //se llama a la funcion createMovies para visualizar las peliculas populares
         createMovies({
             movies,
             container: movieDetailMovieList,
