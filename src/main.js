@@ -12,6 +12,17 @@ const api = axios.create({
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
 
 //Utils
+ 
+//se creó una instancia de un intersection observer para implementar el lazy loading a las imagénes de la app. Este se aplicó todo el HTML por eso no tiene argumento de options (ver documentación).
+const lazyLoader = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        //si el target entra al campo de visión del observador se van a cargar las imagenes.
+        if(entry.isIntersecting){
+            const imgURL = entry.target.getAttribute('data-img');
+            entry.target.setAttribute('src', imgURL);
+        }
+    })
+})
 
 //Esta funcion se utiliza para crear la lista y visualizar las peliculas en la seccion que se requiera.
 function createMovies({
@@ -33,9 +44,11 @@ function createMovies({
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(
-            'src', 
+            'data-img', //se guarda la URL en este atributo para extraerlo después para el lazy loading.
             `${imagesBaseURL}${movieImgSize}${movie.poster_path}`
         );
+
+        lazyLoader.observe(movieImg);  //se marcó cada imagen para el que lazy loader las monitoree.
 
         //se agregan cada un de los componentes como hijos según la herarquia para se mostrados en la pagina web. 
         movieContainer.appendChild(movieImg);
