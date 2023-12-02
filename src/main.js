@@ -47,6 +47,28 @@ function createMovies({
             'data-img', //se guarda la URL en este atributo para extraerlo después para el lazy loading.
             `${imagesBaseURL}${movieImgSize}${movie.poster_path}`
         );
+        //Se le agrega un event listener a cada imagen para ejecutar una acción si aparece algún error al traer el archivo de la API
+        movieImg.addEventListener('error', () => {
+            //si no carga la imagen de la API, se va a mostrar una imagen por defecto y se mostrará el titulo de la pelicula en la mitad de dicha imagen, por lo que se crea un span y un div que contenga ese span para mostrar el titulo y se estila según lo anterior.
+            const movieImgAlt = document.createElement('span');
+            movieImgAlt.textContent = movieImg.getAttribute('alt');
+            movieImgAlt.style.fontWeight = 'bold';
+            movieImgAlt.style.color = '#212A3E';
+
+            const movieAltDiv = document.createElement('div');
+            movieAltDiv.style.minWidth = '70%';
+            movieAltDiv.style.maxWidth = '70%';
+            movieAltDiv.style.position = 'absolute';
+            movieAltDiv.style.padding = '25% 0';
+            movieAltDiv.style.left = '15%';
+            movieAltDiv.style.top = '30%';
+            movieAltDiv.style.textAlign = 'center';
+
+            movieImg.setAttribute('src', '../img/default-movie-img.png');  //se agrega la imagen por defecto como la imagen de la pelicula
+
+            movieAltDiv.appendChild(movieImgAlt);
+            movieContainer.appendChild(movieAltDiv);  //al final se agrega el span como hijo al contenedor de la pelicula y se vuelve hermano de la imagen.
+        });
 
         lazyLoader.observe(movieImg);  //se marcó cada imagen para el que lazy loader las monitoree.
 
