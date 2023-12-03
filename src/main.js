@@ -10,7 +10,6 @@ const api = axios.create({
 }); 
 
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
-
 //Utils
  
 //se creó una instancia de un intersection observer para implementar el lazy loading a las imagénes de la app. Este se aplicó todo el HTML por eso no tiene argumento de options (ver documentación).
@@ -28,9 +27,11 @@ const lazyLoader = new IntersectionObserver(entries => {
 function createMovies({
     movies,
     container,
-    movieModificator
-}){
-    container.innerHTML = '';  //con esta linea se limpia el elemento cada vez que se llama la funcion para evitar cargas duplicadas
+    movieModificator,
+    clean = true,
+}={})
+{
+    if(clean) container.innerHTML = '';  //con esta linea se limpia el elemento cada vez que se llama la funcion para evitar cargas duplicadas
 
     movies.forEach(movie => {
     
@@ -133,6 +134,8 @@ async function getCategoriesMovies(){
 
 //esta funcion se usa para traer las peliculas según la categoria y mostrarlas en la sección de categorias, es asincrona porque se va a consumir una API.
 async function getMovieByCategory(id){
+    let page = 1;  //Esta variable controla la páginación de la API.
+
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la categoria.
     const { data } = await api(`discover/movie`,{
         params:{
@@ -148,10 +151,40 @@ async function getMovieByCategory(id){
         container: genericMovieList,
         movieModificator: "--small",
     })
+
+    //Cargar mas contenido
+
+    //primero se valida que no exista un botón, y si si lo hay se elimina.
+    if(genericListSection.childNodes.length === 6){
+        genericListSection.removeChild(genericListSection.childNodes[5]);
+    }
+
+    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
+    const viewMoreBtn = document.createElement('button');
+    viewMoreBtn.classList.add('trendingPreview-btn')
+    viewMoreBtn.textContent = 'View More';
+    genericListSection.appendChild(viewMoreBtn);
+
+    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
+    viewMoreBtn.addEventListener('click', () => {
+        page++;
+
+        getPaginatedMovies({
+        url: 'discover/movie',
+        params: {
+            'language': 'en-US',
+            'with_genres': id,
+        },
+        page,
+        container: genericMovieList,
+        })
+    });
 }
 
 //esta funcion se usa para traer las peliculas según la búsqueda del usuario y mostrarlas en la sección de búsqueda, es asincrona porque se va a consumir una API.
 async function getMovieBySearch(query){
+    let page = 1;  //Esta variable controla la páginación de la API.
+
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas según la búsqueda del usuario.
     const { data } = await api(`search/movie`,{
         params:{
@@ -167,10 +200,40 @@ async function getMovieBySearch(query){
         container: genericMovieList,
         movieModificator: "--small",
     })
+
+    //Cargar mas contenido
+
+    //primero se valida que no exista un botón, y si si lo hay se elimina.
+    if(genericListSection.childNodes.length === 6){
+        genericListSection.removeChild(genericListSection.childNodes[5]);
+    }
+
+    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
+    const viewMoreBtn = document.createElement('button');
+    viewMoreBtn.classList.add('trendingPreview-btn')
+    viewMoreBtn.textContent = 'View More';
+    genericListSection.appendChild(viewMoreBtn);
+
+    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
+    viewMoreBtn.addEventListener('click', () => {
+        page++;
+
+        getPaginatedMovies({
+        url: 'search/movie',
+        params: {
+            'language': 'en-US',
+            query,
+        },
+        page,
+        container: genericMovieList,
+        })
+    });
 }
 
 //esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
 async function getTrendingMovies(){
+    let page = 1; //Esta variable controla la páginación de la API.
+
     //se hace la solicitud GET con la instancia de AXIOS para traer el objeto de peliculas en tendencia.
     const { data } = await api(`trending/movie/day`, {
         params:{
@@ -185,6 +248,33 @@ async function getTrendingMovies(){
         container: genericMovieList,
         movieModificator: '--small',
     })
+
+    //Cargar mas contenido
+
+    //primero se valida que no exista un botón, y si si lo hay se elimina.
+    if(genericListSection.childNodes.length === 6){
+        genericListSection.removeChild(genericListSection.childNodes[5]);
+    }
+
+    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
+    const viewMoreBtn = document.createElement('button');
+    viewMoreBtn.classList.add('trendingPreview-btn')
+    viewMoreBtn.textContent = 'View More';
+    genericListSection.appendChild(viewMoreBtn);
+
+    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
+    viewMoreBtn.addEventListener('click', () => {
+        page++;
+
+        getPaginatedMovies({
+        url: 'trending/movie/day',
+        params: {
+            'language': 'en-US',
+        },
+        page,
+        container: genericMovieList,
+        })
+    });
 }
 
 //Esta funcion se usa para traer la información de un película en especifico utilizando su ID. Esta se va usar para llenar la sección de detalle de una película.
@@ -263,4 +353,29 @@ async function getRelatedMoviesById(id){
 
     html.scrollTop = 0;
     movieDetailMovieList.scrollLeft = 0;
+}
+
+//Esta funcion se usa para mostrar mas resultados de peliculas para las vistas de tendencias, categorias y búsqueda.
+async function getPaginatedMovies({
+    url,
+    params,
+    page,
+    container
+} = {})
+{   
+    const { data } = await api(url, {
+        params:{
+            ...params,
+            page,
+        }
+    });  //se desestructura la respuesta de api para obtener los datos de una vez
+    const movies = data.results; //movies es el objeto de peliculas según los datos iniciales. tiene una total de 20 elementos.
+
+    //se llama a la funcion createMovies para visualizar las peliculas según los datos iniciales
+    createMovies({
+        movies,
+        container,
+        movieModificator: '--small',
+        clean: false,
+    })
 }
