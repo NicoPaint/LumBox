@@ -10,6 +10,9 @@ const api = axios.create({
 }); 
 
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
+
+let infiniteScrolling;  //con esta variable se va a manejar el infinite scrolling en cada sección.
+
 //Utils
  
 //se creó una instancia de un intersection observer para implementar el lazy loading a las imagénes de la app. Este se aplicó todo el HTML por eso no tiene argumento de options (ver documentación).
@@ -154,31 +157,37 @@ async function getMovieByCategory(id){
 
     //Cargar mas contenido
 
-    //primero se valida que no exista un botón, y si si lo hay se elimina.
-    if(genericListSection.childNodes.length === 6){
-        genericListSection.removeChild(genericListSection.childNodes[5]);
+    //primero se valida que no exista una funcion infinite scrolling, y si si lo hay se elimina.
+    if(infiniteScrolling){
+        genericListSection.removeEventListener('scroll', infiniteScrolling);
+        infiniteScrolling = undefined;
+        console.log('test');
     }
 
-    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
-    const viewMoreBtn = document.createElement('button');
-    viewMoreBtn.classList.add('trendingPreview-btn')
-    viewMoreBtn.textContent = 'View More';
-    genericListSection.appendChild(viewMoreBtn);
+    //Se asigna la función especifíca de la sección al infinite scrolling.
+    infiniteScrolling = () => {
+        const isUserAtBottom = genericListSection.scrollTop + genericListSection.clientHeight >= genericListSection.scrollHeight - 5;
+        const isOutOfPages = page == data.total_pages;
 
-    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
-    viewMoreBtn.addEventListener('click', () => {
-        page++;
+        //Se hace la validación si el usuario alcanzó el fondo de la pantalla, y no ha alcanzado el máximo de páginas.
+        if(isUserAtBottom && !isOutOfPages){
+            page++;  //Se suma uno a la página
 
-        getPaginatedMovies({
-        url: 'discover/movie',
-        params: {
-            'language': 'en-US',
-            'with_genres': id,
-        },
-        page,
-        container: genericMovieList,
-        })
-    });
+            //Se invoca la función de paginación con los respectivos parametros de la sección.
+            getPaginatedMovies({
+            url: 'discover/movie',
+            params: {
+                'language': 'en-US',
+                'with_genres': id,
+            },
+            page,
+            container: genericMovieList,
+            })
+        }
+    }
+
+
+    genericListSection.addEventListener('scroll', infiniteScrolling);
 }
 
 //esta funcion se usa para traer las peliculas según la búsqueda del usuario y mostrarlas en la sección de búsqueda, es asincrona porque se va a consumir una API.
@@ -203,31 +212,37 @@ async function getMovieBySearch(query){
 
     //Cargar mas contenido
 
-    //primero se valida que no exista un botón, y si si lo hay se elimina.
-    if(genericListSection.childNodes.length === 6){
-        genericListSection.removeChild(genericListSection.childNodes[5]);
+    //primero se valida que no exista una funcion infinite scrolling, y si si lo hay se elimina.
+    if(infiniteScrolling){
+        genericListSection.removeEventListener('scroll', infiniteScrolling);
+        infiniteScrolling = undefined;
+        console.log('test');
     }
 
-    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
-    const viewMoreBtn = document.createElement('button');
-    viewMoreBtn.classList.add('trendingPreview-btn')
-    viewMoreBtn.textContent = 'View More';
-    genericListSection.appendChild(viewMoreBtn);
+    //Se asigna la función especifíca de la sección al infinite scrolling.
+    infiniteScrolling = () => {
+        const isUserAtBottom = genericListSection.scrollTop + genericListSection.clientHeight >= genericListSection.scrollHeight - 5;
+        const isOutOfPages = page == data.total_pages;
 
-    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
-    viewMoreBtn.addEventListener('click', () => {
-        page++;
+        //Se hace la validación si el usuario alcanzó el fondo de la pantalla, y no ha alcanzado el máximo de páginas.
+        if(isUserAtBottom && !isOutOfPages){
+            page++;  //Se suma uno a la página
 
-        getPaginatedMovies({
-        url: 'search/movie',
-        params: {
-            'language': 'en-US',
-            query,
-        },
-        page,
-        container: genericMovieList,
-        })
-    });
+            //Se invoca la función de paginación con los respectivos parametros de la sección.
+            getPaginatedMovies({
+            url: 'search/movie',
+            params: {
+                'language': 'en-US',
+                query,
+            },
+            page,
+            container: genericMovieList,
+            })
+        }
+    }
+
+
+    genericListSection.addEventListener('scroll', infiniteScrolling);
 }
 
 //esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
@@ -251,30 +266,36 @@ async function getTrendingMovies(){
 
     //Cargar mas contenido
 
-    //primero se valida que no exista un botón, y si si lo hay se elimina.
-    if(genericListSection.childNodes.length === 6){
-        genericListSection.removeChild(genericListSection.childNodes[5]);
+    //primero se valida que no exista una funcion infinite scrolling, y si si la hay se elimina.
+    if(infiniteScrolling){
+        genericListSection.removeEventListener('scroll', infiniteScrolling);
+        infiniteScrolling = undefined;
+        console.log('test');
     }
 
-    //Se crea el botón nuevo y se agrega como hijo al contendor de listas genericas 
-    const viewMoreBtn = document.createElement('button');
-    viewMoreBtn.classList.add('trendingPreview-btn')
-    viewMoreBtn.textContent = 'View More';
-    genericListSection.appendChild(viewMoreBtn);
+    //Se asigna la función especifíca de la sección al infinite scrolling.
+    infiniteScrolling = () => {
+        const isUserAtBottom = genericListSection.scrollTop + genericListSection.clientHeight >= genericListSection.scrollHeight - 5;
+        const isOutOfPages = page == data.total_pages;
 
-    //Se le agrega un event listener para que cada vez que se le haga click este cargue mas contenido según la vista en que esta.
-    viewMoreBtn.addEventListener('click', () => {
-        page++;
+        //Se hace la validación si el usuario alcanzó el fondo de la pantalla, y no ha alcanzado el máximo de páginas.
+        if(isUserAtBottom && !isOutOfPages){
+            page++;  //Se suma uno a la página
 
-        getPaginatedMovies({
-        url: 'trending/movie/day',
-        params: {
-            'language': 'en-US',
-        },
-        page,
-        container: genericMovieList,
-        })
-    });
+            //Se invoca la función de paginación con los respectivos parametros de la sección.
+            getPaginatedMovies({
+            url: 'trending/movie/day',
+            params: {
+                'language': 'en-US',
+            },
+            page,
+            container: genericMovieList,
+            })
+        }
+    }
+
+
+    genericListSection.addEventListener('scroll', infiniteScrolling);
 }
 
 //Esta funcion se usa para traer la información de un película en especifico utilizando su ID. Esta se va usar para llenar la sección de detalle de una película.
@@ -370,6 +391,7 @@ async function getPaginatedMovies({
         }
     });  //se desestructura la respuesta de api para obtener los datos de una vez
     const movies = data.results; //movies es el objeto de peliculas según los datos iniciales. tiene una total de 20 elementos.
+    console.log(movies);
 
     //se llama a la funcion createMovies para visualizar las peliculas según los datos iniciales
     createMovies({
