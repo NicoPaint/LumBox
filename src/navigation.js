@@ -176,4 +176,5 @@ function homePage(){
 
     getTrendingMoviesPreview(); //se llama esta función para mostrar las peliculas en tendencia. El archivo esta en main.js
     getCategoriesMovies();  //se llama esta función para mostrar las categorias de peliculas. El archivo esta en main.js
+    getLikedMovies();  //se llama esta función para mostrar las peliculas favoritas en LS. El archivo esta en main.js
 }

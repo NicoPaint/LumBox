@@ -194,6 +194,29 @@ main{
     cursor: pointer;
 }
 
+.movie-btn{
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: var(--polar-ocean);
+}
+
+.movie-btn::before{
+    content: '🤍';
+}
+
+.movie-btn--liked{
+    background-color: var(--white-ice);
+}
+
+.movie-btn--liked::before{
+    content: '💔';
+}
+
 .movie-container--loading{
     min-width: 20rem;  /* hace que el skeleton se expanda mas alla del contenedor */
     background-color: var(--loading-grey);
@@ -431,6 +454,23 @@ footer a img{
     width: 90vw;  /* Revisar despues porque se rompe este div */
     gap: 1.5rem;
     color: var(--white-ice);
+}
+
+/* estilos cuando favorite movies esta vacio */
+
+.noFavorite-Container{
+    display: grid;
+    place-items: center;
+    width: 32rem;
+    height: 30rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.noFavorite-Container span{
+    font-size: 2rem;
+    color: var(--dark-blue);
+    font-weight: bold;
 }
 
 /* navegación */

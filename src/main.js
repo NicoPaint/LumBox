@@ -1,3 +1,6 @@
+//Data
+
+//API REST
 //se hizo la migración a AXIOS por lo que se crea un instancia de el para configurar los datos comunes y asi usarlos por todo el programa.
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3/',
@@ -7,10 +10,46 @@ const api = axios.create({
     params: {
         'api_key': API_KEY,  //API_KEY esta oculta en otro archivo, usa tu propia API_KEY.
     }
-}); 
+});
 
+//Local Storage. Solo se pueden guardar Strings en el.
+/* estructura de la lista de peliculas favoritas en el LocalStorage
+
+Storage {likedMovies: '{ 
+    'movie1.id': {...movie1},
+    'movie2.id': {...movie2},
+    'movie3.id': {...movie3},
+    etc...
+}'};
+
+*/
+
+//Esta funcion se usa para traer la lista de peliculas guardadas en el LocalStorage y retornarlas en forma de objeto. Si no hay nada devuelve un obj vacio.
+function getLikedMoviesList(){
+    const item = JSON.parse(localStorage.getItem("likedMovies"));
+    let movies;
+
+    item ? movies = item : movies = {};
+
+    return movies
+}
+
+//Esta funcion se usa para agregar o eliminar una pelicula de la lista de peliculas favoritas en LS.
+function likeMovie(movie){
+    const likedMovies = getLikedMoviesList();  //Se trae la lista guardada en LS, en forma de objeto, para hacer la comparacion
+
+    if(likedMovies[movie.id]){  //si la pelicula esta en la lista, se elimina del objeto
+        likedMovies[movie.id] = undefined;
+
+    } else{  //si no esta, se agrega al objeto
+        likedMovies[movie.id] = movie;
+    }
+
+    localStorage.setItem('likedMovies', JSON.stringify(likedMovies));  //se edita el string guardado en LS, convirtiendo el objeto a string primero.
+}
+
+//variables globales
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
-
 let infiniteScrolling;  //con esta variable se va a manejar el infinite scrolling en cada sección.
 
 //Utils
@@ -41,7 +80,6 @@ function createMovies({
         //Se crean los componentes que forman parte de cada uno de los elementos de la lista y se le agregan los atributos que requieren, revisar index.html
         const movieContainer = document.createElement('div');
         movieContainer.classList.add(`movie-container${movieModificator}`);
-        movieContainer.addEventListener('click', () => location.hash = `#movie=${movie.id}`);
         
         const movieImg = document.createElement('img');
         const movieImgSize = '/w342'  //esto se sacó segun la documentacion de TMDB API. https://developer.themoviedb.org/reference/configuration-details
@@ -51,6 +89,20 @@ function createMovies({
             'data-img', //se guarda la URL en este atributo para extraerlo después para el lazy loading.
             `${imagesBaseURL}${movieImgSize}${movie.poster_path}`
         );
+        movieImg.addEventListener('click', () => location.hash = `#movie=${movie.id}`);
+
+        //Se crea el boton de like de las peliculas para agregarlas o eliminarlas de la sección de favoritos
+        const movieBtn= document.createElement('button');
+        movieBtn.classList.add('movie-btn');
+        getLikedMoviesList()[movie.id] && movieBtn.classList.add('movie-btn--liked');  //Se hace una short-circuit evaluation. Si la pelicula esta en la lista de favoritos de LS agrega la clase 'movie-btn--liked' al boton cada vez que se construyen las secciones, sino no se la agrega (no se ejecuta la función despues del &&).
+        //Se el agrega un event listener para cada vez que se haga click, ya sea para agregarla o eliminarla de la lista de favoritos (Local Storage)
+        movieBtn.addEventListener('click', () => {
+            movieBtn.classList.toggle('movie-btn--liked');  //esta funcion agrega y quita la clase movie-btn--liked cada vez que se hace click
+            likeMovie(movie);  //se invoca esta función que es la encargada de agregar o eliminar la pelicula al Local Storage
+            getLikedMovies();  //Se invoca esta funcnion para actualizar la seccion en tiempo real con cada click.
+            getTrendingMoviesPreview();  //se invoca esta funcion para actualizar la seccion en tiempo real con cada click, especificamente cuando el click se hace en una pelicula mostrada en la seccion de favoritos.
+        });
+
         //Se le agrega un event listener a cada imagen para ejecutar una acción si aparece algún error al traer el archivo de la API
         movieImg.addEventListener('error', () => {
             //si no carga la imagen de la API, se va a mostrar una imagen por defecto y se mostrará el titulo de la pelicula en la mitad de dicha imagen, por lo que se crea un span y un div que contenga ese span para mostrar el titulo y se estila según lo anterior.
@@ -78,6 +130,7 @@ function createMovies({
 
         //se agregan cada un de los componentes como hijos según la herarquia para se mostrados en la pagina web. 
         movieContainer.appendChild(movieImg);
+        movieContainer.appendChild(movieBtn);
         container.appendChild(movieContainer);  //trendingPreviewMovieList se trajo de node.js
     });
 }
@@ -400,4 +453,31 @@ async function getPaginatedMovies({
         movieModificator: '--small',
         clean: false,
     })
+}
+
+//esta funcion se usa para traer las peliculas guardadas como liked en el LocalStorage y mostrarlas en la sección de favoritos. Se va a consumir el LocalStorage.
+function getLikedMovies(){
+    const likedMoviesObj = getLikedMoviesList();  //Se trae la lista guardada en LS, en forma de objeto, para obtener la info de las peliculas
+    const likedMoviesArr = Object.values(likedMoviesObj);  //se convierte los valores del objeto en un array para poder usar la funcion createMovies
+
+    //Se evalua si hay algo en el array primero. Si si hay se procede a renderizar la información.
+    if(likedMoviesArr.length != 0){
+        //se invoca la funcion createMovies con la informacion guardada en LS. Esta las va a renderizar en la sección de favoritos.
+        createMovies({
+            movies: likedMoviesArr,
+            container: likedMovieList,
+            movieModificator: '',
+        })
+
+    } else {  //Si no hay nada se limpia el contenedor y se muestra un mensaje de que no hay ninguna pelicula seleccionada.
+        likedMovieList.innerHTML = '';
+        const noFavoriteContainer = document.createElement('div');
+        noFavoriteContainer.classList.add('noFavorite-Container');
+
+        const noFavoriteMessage = document.createElement('span');
+        noFavoriteMessage.textContent = "You has not selected any movie yet 😔";
+
+        noFavoriteContainer.appendChild(noFavoriteMessage);
+        likedMovieList.appendChild(noFavoriteContainer);
+    }
 }
