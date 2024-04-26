@@ -475,7 +475,7 @@ function getLikedMovies(){
         noFavoriteContainer.classList.add('noFavorite-Container');
 
         const noFavoriteMessage = document.createElement('span');
-        noFavoriteMessage.textContent = "You has not selected any movie yet 😔";
+        noFavoriteMessage.textContent = "You have not selected any movie yet 😔";
 
         noFavoriteContainer.appendChild(noFavoriteMessage);
         likedMovieList.appendChild(noFavoriteContainer);
