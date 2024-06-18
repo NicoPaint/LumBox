@@ -52,6 +52,108 @@ function likeMovie(movie){
 const imagesBaseURL = "https://image.tmdb.org/t/p/";  //url de donde se sacan todas las imagenes en TMDB API
 let infiniteScrolling;  //con esta variable se va a manejar el infinite scrolling en cada sección.
 
+/* 
+list of valid image sizes and the valid image address. Mirar documentacion https://developer.themoviedb.org/reference/configuration-details
+
+{
+  "images": {
+    "base_url": "http://image.tmdb.org/t/p/",
+    "secure_base_url": "https://image.tmdb.org/t/p/",
+    "backdrop_sizes": [
+      "w300",
+      "w780",
+      "w1280",
+      "original"
+    ],
+    "logo_sizes": [
+      "w45",
+      "w92",
+      "w154",
+      "w185",
+      "w300",
+      "w500",
+      "original"
+    ],
+    "poster_sizes": [
+      "w92",
+      "w154",
+      "w185",
+      "w342",
+      "w500",
+      "w780",
+      "original"
+    ],
+    "profile_sizes": [
+      "w45",
+      "w185",
+      "h632",
+      "original"
+    ],
+    "still_sizes": [
+      "w92",
+      "w185",
+      "w300",
+      "original"
+    ]
+  },
+  "change_keys": [
+    "adult",
+    "air_date",
+    "also_known_as",
+    "alternative_titles",
+    "biography",
+    "birthday",
+    "budget",
+    "cast",
+    "certifications",
+    "character_names",
+    "created_by",
+    "crew",
+    "deathday",
+    "episode",
+    "episode_number",
+    "episode_run_time",
+    "freebase_id",
+    "freebase_mid",
+    "general",
+    "genres",
+    "guest_stars",
+    "homepage",
+    "images",
+    "imdb_id",
+    "languages",
+    "name",
+    "network",
+    "origin_country",
+    "original_name",
+    "original_title",
+    "overview",
+    "parts",
+    "place_of_birth",
+    "plot_keywords",
+    "production_code",
+    "production_companies",
+    "production_countries",
+    "releases",
+    "revenue",
+    "runtime",
+    "season",
+    "season_number",
+    "season_regular",
+    "spoken_languages",
+    "status",
+    "tagline",
+    "title",
+    "translations",
+    "tvdb_id",
+    "tvrage_id",
+    "type",
+    "video",
+    "videos"
+  ]
+}
+*/
+
 //Utils
  
 //se creó una instancia de un intersection observer para implementar el lazy loading a las imagénes de la app. Este se aplicó todo el HTML por eso no tiene argumento de options (ver documentación).
@@ -135,7 +237,49 @@ function createMovies({
     });
 }
 
-//Llamados a la API
+//Llamados a la 
+
+//esta función se usa para traer la información de la pelicula #1 en tendencia y mostrarla en la seccion destacada para desktop.
+async function getTheTrendiestMovie(movie){
+
+    highlightedMovieInfo.innerHTML = ''; //Se vacia el contenedor para evitar duplicados
+    
+    //Se trae la informacion de las images disponibles de esta pelicula, incluyendo poster, logos y backdrops
+    const { data } = await api(`movie/${movie.id}/images`,{
+        params:{
+            'language': 'en',
+        }
+    })
+
+    //se aisla la info de los logos y backdrops
+    const backdrops = data.backdrops;
+    const logos = data.logos;
+
+    //Se evalua si existen logos o no. en caso de que si se trae el primero para mostrarlo. En caso de que no, se mostrará el titulo de la pelicula
+    let highlightedTitle;
+    if(logos.length > 0){
+        highlightedTitle = document.createElement('img');
+        highlightedTitle.setAttribute('src', `${imagesBaseURL}original${logos[0].file_path}`);
+    } else {
+        highlightedTitle = document.createElement('h2');
+        highlightedTitle.textContent = movie.title
+        highlightedTitle.classList.add('highlighted-movie-title');
+    }
+
+    //se crean y configuran los nodos que hacen parte de el contenedor de la información
+    const highlightedOverview = document.createElement('p');
+    highlightedOverview.textContent = movie.overview;
+    highlightedOverview.classList.add('highlighted-movie-overview');
+
+    const moreInfoBtn = document.createElement('button');
+    moreInfoBtn.textContent = 'More Info';
+    moreInfoBtn.classList.add('more-info-btn');
+    moreInfoBtn.addEventListener('click', () => location.hash = `#movie=${movie.id}`);  //se agrega un event listener al boton de more info para cambiar a la seccion especifica de la pelicula y mostrar el resto de la información.
+
+    highlightedMovieInfo.append(highlightedTitle, highlightedOverview, moreInfoBtn);  //se agregan los nodos como hijos.
+    highlightedSection.style.backgroundImage= `url(${imagesBaseURL}original${backdrops[0].file_path})`;  //se agrega la imagen de fondo de la sección segun lo que se haya traido de la API.
+
+}
 
 //esta funcion se usa para traer las peliculas en tendencia y mostrarlas en la sección de tendencia, es asincrona porque se va a consumir una API.
 async function getTrendingMoviesPreview(){
@@ -153,6 +297,8 @@ async function getTrendingMoviesPreview(){
         container: trendingPreviewMovieList,
         movieModificator: '',
     })
+
+    getTheTrendiestMovie(movies[0]); //se invoca esta funcion pasandole solamente la informacion de la pelicula #1 en tendencia
 }
 
 //esta funcion se usa para traer las categorias (generos) de las peliculas y mostrarlas en la sección de categories, es asincrona porque se va a consumir una API.

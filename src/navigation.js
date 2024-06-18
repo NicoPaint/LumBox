@@ -51,6 +51,7 @@ function trendsPage(){
     searchForm.classList.add('inactive');
 
     main.classList.remove('main--movie-detail');
+    highlightedSection.classList.add('inactive');
     trendingSection.classList.add('inactive');
     categoriesSection.classList.add('inactive');
     likedSection.classList.add('inactive');
@@ -78,6 +79,7 @@ function searchPage(){
     searchForm.classList.remove('inactive');
 
     main.classList.remove('main--movie-detail');
+    highlightedSection.classList.add('inactive');
     trendingSection.classList.add('inactive');
     categoriesSection.classList.add('inactive');
     likedSection.classList.add('inactive');
@@ -106,6 +108,7 @@ function movieDetailsPage(){
     searchForm.classList.add('inactive');
 
     main.classList.add('main--movie-detail');
+    highlightedSection.classList.add('inactive');
     trendingSection.classList.add('inactive');
     categoriesSection.classList.add('inactive');
     likedSection.classList.add('inactive');
@@ -134,6 +137,7 @@ function categoriesPage(){
     searchForm.classList.add('inactive');
 
     main.classList.remove('main--movie-detail');
+    highlightedSection.classList.add('inactive');
     trendingSection.classList.add('inactive');
     categoriesSection.classList.add('inactive');
     likedSection.classList.add('inactive');
@@ -166,6 +170,7 @@ function homePage(){
     searchForm.classList.remove('inactive');
 
     main.classList.remove('main--movie-detail');
+    highlightedSection.classList.remove('inactive');
     trendingSection.classList.remove('inactive');
     categoriesSection.classList.remove('inactive');
     likedSection.classList.remove('inactive');

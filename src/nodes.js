@@ -7,6 +7,7 @@ const main = document.querySelector('main');
 const footer = document.querySelector('footer');
 
 /* secciones */
+const highlightedSection = document.querySelector('.highlighted-movie-container');
 const trendingSection = document.querySelector('.trendingPreview-container');
 const categoriesSection = document.querySelector('.categoriesPreview-container');
 const likedSection = document.querySelector('.likedMovie-container');
@@ -15,6 +16,7 @@ const movieDetailSection = document.querySelector('.movieDetail-container');
 
 /* listas y contenedores */
 const searchForm = document.querySelector('.header-search');
+const highlightedMovieInfo = document.querySelector('.highlighted-movie-info');
 const trendingPreviewMovieList = document.querySelector('.trendingPreview-movieList');
 const categoriesPreviewList = document.querySelector('.categoriesPreview-list');
 const likedMovieList = document.querySelector('.liked-movieList');
