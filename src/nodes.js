@@ -7,6 +7,7 @@ const main = document.querySelector('main');
 const footer = document.querySelector('footer');
 
 /* secciones */
+const categoryDropDown = document.querySelector('.category-dropdown');
 const highlightedSection = document.querySelector('.highlighted-movie-container');
 const trendingSection = document.querySelector('.trendingPreview-container');
 const categoriesSection = document.querySelector('.categoriesPreview-container');

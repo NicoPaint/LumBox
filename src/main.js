@@ -237,6 +237,8 @@ function createMovies({
     });
 }
 
+categoryDropDown.addEventListener('click', () => categoriesSection.classList.toggle('category-dropdown-show'));
+
 //Llamados a la 
 
 //esta función se usa para traer la información de la pelicula #1 en tendencia y mostrarla en la seccion destacada para desktop.
@@ -260,6 +262,10 @@ async function getTheTrendiestMovie(movie){
     if(logos.length > 0){
         highlightedTitle = document.createElement('img');
         highlightedTitle.setAttribute('src', `${imagesBaseURL}original${logos[0].file_path}`);
+        highlightedTitle.style.alignSelf = 'flex-start';
+        highlightedTitle.style.maxHeight = '25rem';
+        highlightedTitle.style.maxWidth = '50rem';
+        highlightedTitle.style.objectFit = 'contain';
     } else {
         highlightedTitle = document.createElement('h2');
         highlightedTitle.textContent = movie.title
