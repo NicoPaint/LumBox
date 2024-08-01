@@ -71,6 +71,7 @@ header{
     font-size: 2.5rem;
     font-weight: bold;
     color: var(--dark-blue);
+    cursor: pointer;
     /* background-image: url("https://cdn-icons-png.flaticon.com/512/54/54782.png");
     background-position: center;
     background-repeat: no-repeat;
@@ -147,7 +148,7 @@ main{
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    width: 50rem;
+    width: 52rem;
     padding-left: 1rem;
     margin-left: 5%;
     gap: 1rem;
@@ -481,7 +482,7 @@ footer a img{
 }
 
 .movieDetail-categories{
-    max-width: 200px;
+    max-width: 30rem;
     text-align: end;
     font-size: 1.4rem;
     font-weight: 300;
@@ -490,7 +491,7 @@ footer a img{
 }
 
 .movieDetail-overview{
-    font-size: 1.2qrem;
+    font-size: 1.2rem;
     text-align: justify;
     color: var(--seal-grey);
 }
@@ -592,6 +593,24 @@ footer a img{
     border-bottom-right-radius: 0.5rem;
     box-shadow: 0px 4px 8px var(--seal-grey);
    }
+
+   .header--movie-detail{
+    align-items: start;
+    height: 100%;
+   }
+
+   .movieDetail-container{
+    margin-top: 60rem;
+   }
+
+   .movieDetail-categories{
+    font-size: 1.6rem;
+   }
+
+   .movieDetail-overview{
+    font-size: 1.4rem;
+   }
+
 }
 
 @media (min-width: 950px){
@@ -601,6 +620,19 @@ footer a img{
         min-width: 21rem;
         min-height: 28rem;
     }
+
+    .movieDetail-title,
+    .movieDetail-score{
+        font-size: 2.8rem;
+    }
+
+    .movieDetail-categories{
+        font-size: 2rem;
+   }
+    
+    .movieDetail-overview{
+        font-size: 1.8rem;
+   }
 }
 
 /* navegación */

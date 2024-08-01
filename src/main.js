@@ -254,7 +254,7 @@ async function getTheTrendiestMovie(movie){
     })
 
     //se aisla la info de los logos y backdrops
-    const backdrops = data.backdrops;
+    /* const backdrops = data.backdrops; */
     const logos = data.logos;
 
     //Se evalua si existen logos o no. en caso de que si se trae el primero para mostrarlo. En caso de que no, se mostrará el titulo de la pelicula
@@ -283,7 +283,7 @@ async function getTheTrendiestMovie(movie){
     moreInfoBtn.addEventListener('click', () => location.hash = `#movie=${movie.id}`);  //se agrega un event listener al boton de more info para cambiar a la seccion especifica de la pelicula y mostrar el resto de la información.
 
     highlightedMovieInfo.append(highlightedTitle, highlightedOverview, moreInfoBtn);  //se agregan los nodos como hijos.
-    highlightedSection.style.backgroundImage= `url(${imagesBaseURL}original${backdrops[0].file_path})`;  //se agrega la imagen de fondo de la sección segun lo que se haya traido de la API.
+    highlightedSection.style.backgroundImage= `url(${imagesBaseURL}original${movie.backdrop_path})`;  //se agrega la imagen de fondo de la sección directamente de la pelicula.
 
 }
 
@@ -528,10 +528,17 @@ async function getMovieById(id){
     const movieImgSize = '/w500'  //esto se sacó segun la documentacion de TMDB API. https://developer.themoviedb.org/reference/configuration-details
     
     //Se agrega la imagen de la película como fondo del header para dar el efecto deseado.
-    header.style.background = `
-        linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%),
-        top/cover no-repeat url(${imagesBaseURL}${movieImgSize}${movie.poster_path})
-    `;
+    if(screen.width < 760){
+        header.style.background = `
+            linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%),
+            top/cover no-repeat url(${imagesBaseURL}${movieImgSize}${movie.poster_path})
+        `;
+    } else{
+        header.style.background = `
+            linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%),
+            top/cover no-repeat url(${imagesBaseURL}/original${movie.backdrop_path})
+        `;
+    }
     
     //Se extrae la info de los géneros para mostrarlo en una sola línea.
     const movieCategories = movie.genres.map(genre => genre.name);
